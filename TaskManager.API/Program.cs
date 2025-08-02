@@ -1,17 +1,19 @@
-using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using TaskManager.API.Data;
 
-Env.Load();
-
 var builder = WebApplication.CreateBuilder(args);
 
+DotNetEnv.Env.Load();
+var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")
+    ?? builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDatabaseDeveloperPageExceptionFilter(); 
 
 var app = builder.Build();
 
