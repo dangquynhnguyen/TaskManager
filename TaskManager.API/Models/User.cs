@@ -1,9 +1,22 @@
-﻿namespace TaskManager.API.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TaskManager.API.Models;
 
 public class User
 {
     public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
 
-    public List<Task> Tasks { get; set; } = new();
+    [Required]
+    public string Name { get; set; }
+
+    [Required, EmailAddress]
+    public string Email { get; set; }
+
+    [Required]
+    public string PasswordHash { get; set; }
+
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    // Quan hệ
+    public ICollection<TaskItem> Tasks { get; set; }
 }
