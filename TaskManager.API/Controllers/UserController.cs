@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TaskManager.API.Data;
+using TaskManager.API.DTOs.Users;
 using TaskManager.API.Models;
 
 namespace TaskManager.API.Controllers;
@@ -19,14 +20,23 @@ public class UserController : ControllerBase
     public UserController(AppDbContext context) => _context = context;
 
     [HttpGet]
-    public async Task<IActionResult> Get() =>
+    public async Task<IActionResult> GetUsers() =>
         Ok(await _context.Users.Include(u => u.Tasks).ToListAsync());
 
     [HttpPost]
-    public async Task<IActionResult> Create(User user)
+    public async Task<IActionResult> CreateUser(UserDTO dto)
     {
+        if (string.IsNullOrWhiteSpace(dto.Name))
+            return BadRequest("UserName is required");
+
+        var user = new User
+        {
+            Name = dto.Name 
+        };
+
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
-        return Ok(user);
+
+        return CreatedAtAction(nameof(GetUsers), new { id = user.Id }, user);
     }
 }

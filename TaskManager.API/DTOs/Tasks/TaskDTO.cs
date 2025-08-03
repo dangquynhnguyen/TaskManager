@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TaskManager.API.DTOs;
+namespace TaskManager.API.DTOs.Tasks;
 
-public class TaskItemDTO
+public class TaskDTO
 {
     [Required]
     [MinLength(3)]

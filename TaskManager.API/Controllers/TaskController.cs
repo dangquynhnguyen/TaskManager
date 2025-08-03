@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TaskManager.API.Data;
-using TaskManager.API.DTOs;
+using TaskManager.API.DTOs.Tasks;
 using TaskManager.API.Models;
 
 namespace TaskManager.API.Controllers;
@@ -33,9 +33,9 @@ public class TaskController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateTask(TaskItemDTO dto)
+    public async Task<IActionResult> CreateTask(TaskDTO dto)
     {
-        var task = new TaskItem
+        var task = new Models.Task
         {
             Title = dto.Title,
             IsCompleted = dto.IsCompleted,
@@ -50,7 +50,7 @@ public class TaskController : ControllerBase
 
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateTask(int id, TaskItemDTO dto)
+    public async Task<IActionResult> UpdateTask(int id, TaskDTO dto)
     {
         var task = await _context.Tasks.FindAsync(id);
         if (task == null)
